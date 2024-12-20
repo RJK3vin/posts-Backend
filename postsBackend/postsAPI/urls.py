@@ -7,5 +7,6 @@ router = DefaultRouter()
 router.register(r'posts', views.PostViewSet, basename='post')
 
 urlpatterns = [
-    path('', include(router.urls))
+    path('', include(router.urls)),
+    path('users/me/', views.UserProfileView.as_view(), name='user-profile'),
 ]

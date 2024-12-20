@@ -18,5 +18,6 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('', include('postsAPI.urls'))
+    path('', include('postsAPI.urls')),
+    path('api-auth/', include('rest_framework.urls')),
 ]

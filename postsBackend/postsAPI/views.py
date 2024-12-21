@@ -12,6 +12,9 @@ class PostViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
 class UserProfileView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -22,7 +25,7 @@ class UserProfileView(APIView):
 
 class UserCreateView(APIView):
     def post(self, request):
-        serliazer = UserCreateSerializer(data=request.data)
+        serializer = UserCreateSerializer(data=request.data)
         if serializer.is_valid():
             serliazer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

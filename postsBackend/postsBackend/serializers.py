@@ -3,14 +3,16 @@ from rest_framework import serializers
 from postsAPI.models import Post
 
 class PostSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username', read_only=True)
+
     class Meta:
         model = Post
-        fields = ['id','comment']
+        fields = ['id','comment', 'username']
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email']
+        fields = ['id', 'username']
 
 class UserCreateSerializer(serializers.ModelSerializer):
     class Meta:

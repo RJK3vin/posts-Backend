@@ -4,29 +4,26 @@ from postsAPI.models import Post
 
 class PostSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username', read_only=True)
-    tags = serializers.ListField(child=serializers.CharField(), required=False)
+    tags = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username', many=True, required=False)
     
     class Meta:
         model = Post
         fields = ['id','comment', 'username', 'tags']
-    
+
     def validate_tags(self, value):
         valid_users = []
         for tag in value:
-            if not tag.startswith("@"):
-                raise serializers.ValidationError(f"Invalid tag format: {tag}. Use @username format.")
-            username = tag[1:]
-            try:
-                user = User.objects.get(username=username)
-                valid_users.append(user)
-            except User.DoesNotExist:
-                raise serializers.ValidationError(f"User with username '{username}' does not exist.")
-        return valid_users
+            if not isinstance(tag, user):
+                raise serializers.ValidationError(f"Invalid tag format: {tag}. Tags must be valid User instances.")
+            valid_users.append(tag)
+        return valid_users 
 
     def create(self, validated_data):
         tags = validated_data.pop('tags',[])
         post = Post.objects.create(**validated_data)
-        post.tags.set(tags)
+
+        for tag in tags:
+            post.tags.add(tag)
         return post
 
 class UserSerializer(serializers.ModelSerializer):

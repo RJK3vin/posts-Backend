@@ -1,19 +1,27 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from postsAPI.models import Post
+from postsAPI.models import Post, Comment
+
+class CommentSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username',read_only=True)
+
+    class Meta:
+        model = Comment
+        fields = ['id', 'content', 'username']
 
 class PostSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username', read_only=True)
     tags = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username', many=True, required=False)
-    
+    comments = CommentSerializer(many=True, read_only=True)
+
     class Meta:
         model = Post
-        fields = ['id','comment', 'username', 'tags']
+        fields = ['id','comment', 'username', 'tags', 'comments']
 
     def validate_tags(self, value):
         valid_users = []
         for tag in value:
-            if not isinstance(tag, user):
+            if not isinstance(tag, User):
                 raise serializers.ValidationError(f"Invalid tag format: {tag}. Tags must be valid User instances.")
             valid_users.append(tag)
         return valid_users 

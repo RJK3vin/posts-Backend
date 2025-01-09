@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from postsAPI.models import Post
+from postsAPI.models import Post, Comment
 from postsBackend.serializers import PostSerializer, UserSerializer, UserCreateSerializer, CommentSerializer
 from rest_framework import permissions
 from rest_framework import status
@@ -49,8 +49,8 @@ class CommentListView(APIView):
         except Post.DoesNotExist:
             return Response({"detail": "Post not found."}, status=status.HTTP_404_NOT_FOUND)
 
-        comments = Comment.objects.filter(post=post)
-        serializer = CommentSerializer(comments, many=True)
+        comment = Comment.objects.filter(post=post)
+        serializer = CommentSerializer(comment, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class CommentCreateView(APIView):

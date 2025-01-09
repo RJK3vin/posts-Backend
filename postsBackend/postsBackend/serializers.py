@@ -7,7 +7,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ['id', 'content', 'username']
+        fields = ['id', 'comment', 'username']
 
 class PostSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username', read_only=True)
@@ -16,7 +16,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['id','comment', 'username', 'tags', 'comments']
+        fields = ['id','post', 'username', 'tags', 'comments']
 
     def validate_tags(self, value):
         valid_users = []

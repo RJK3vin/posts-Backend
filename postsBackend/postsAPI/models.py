@@ -6,7 +6,8 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 
 class Post(models.Model):
-    post = models.CharField(max_length = 300, blank = False, default = '')
+    post = models.CharField(max_length= 500, blank= False, default= '')
+    caption = models.CharField(max_length = 300, blank = False, default = '')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='posts', on_delete=models.CASCADE)
     tags = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='tagged_in_posts', blank=True)
 

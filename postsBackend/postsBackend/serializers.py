@@ -16,7 +16,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['id','post', 'username', 'tags', 'comments']
+        fields = ['id','post', 'caption','username', 'tags', 'comments']
 
     def validate_tags(self, value):
         valid_users = []
